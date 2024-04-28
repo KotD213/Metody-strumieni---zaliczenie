@@ -1,0 +1,72 @@
+import java.util.ArrayList;
+import java.util.List;
+import java.util.function.Predicate;
+
+public class StreamMethodsSimulation {
+
+    public static <T> void forEach(List<T> list, MyConsumer<T> consumer) {
+        for (T item : list) {
+            consumer.accept(item);
+        }
+    }
+
+    public static <T> List<T> filter(List<T> list, Predicate<T> predicate) {
+        List<T> filteredList = new ArrayList<>();
+        for (T item : list) {
+            if (predicate.test(item)) {
+                filteredList.add(item);
+            }
+        }
+        return filteredList;
+    }
+
+    public static <T> boolean anyMatch(List<T> list, Predicate<T> predicate) {
+        for (T item : list) {
+            if (predicate.test(item)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public static <T> boolean noneMatch(List<T> list, Predicate<T> predicate) {
+        for (T item : list) {
+            if (predicate.test(item)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    // Metoda allMatch
+    public static <T> boolean allMatch(List<T> list, Predicate<T> predicate) {
+        for (T item : list) {
+            if (!predicate.test(item)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public static void main(String[] args) {
+        List<Integer> numbers = List.of(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
+
+        forEach(numbers, System.out::println);
+
+        List<Integer> filteredNumbers = filter(numbers, n -> n % 2 == 0);
+        System.out.println("Filtered numbers: " + filteredNumbers);
+
+        boolean anyMatchResult = anyMatch(numbers, n -> n > 5);
+        System.out.println("Any match result: " + anyMatchResult);
+
+        boolean noneMatchResult = noneMatch(numbers, n -> n > 10);
+        System.out.println("None match result: " + noneMatchResult);
+
+        boolean allMatchResult = allMatch(numbers, n -> n < 20);
+        System.out.println("All match result: " + allMatchResult);
+    }
+}
+
+interface MyConsumer<T> {
+    void accept(T t);
+}
